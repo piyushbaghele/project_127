@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd , time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
@@ -8,11 +8,11 @@ browser = webdriver.Edge()
 browser.get(START_URL)
 
 scraped_data = []
-
+time.sleep(7)
 def scrape():
     soup = BeautifulSoup(browser.page_source, "html.parser")
 
-    bright_star_table = soup.find("table", attrs={"class", "wikitable"})
+    bright_star_table = soup.find("table", attrs={"class", "sortable"})
     table_body = bright_star_table.find('tbody')
     table_rows = table_body.find_all('tr')
 
@@ -39,13 +39,10 @@ stars_data = []
 for i in range(0, len(scraped_data)):
     Star_names = scraped_data[i][1]  # Update index
     Distance = scraped_data[i][3]    # Update index
-    Mass = scraped_data[i][5]        # Update index
-    Radius = scraped_data[i][6]      # Update index
-    Lum = scraped_data[i][7]         # Update index
 
-    required_data = [Star_names, Distance, Mass, Radius, Lum]
+    required_data = [Star_names, Distance]
     stars_data.append(required_data)
 
-headers = ['Star_name', 'Distance', 'Mass', 'Radius', 'Lum']
+headers = ['Star_name', 'Distance']
 star_df_1 = pd.DataFrame(stars_data, columns=headers)
 star_df_1.to_csv("scraped_data_1.csv", index=True, index_label='id')
